@@ -6,6 +6,8 @@
 GET     /                           controllers.Application.index()
 GET     /dashboard                  controllers.Dashboard.index()
 
+GET     /dealer                     controllers.dealer.Index.index()
+
 POST    /login                      controllers.Application.authenticate()
 GET     /logout                     controllers.Application.logout()
 

@@ -9,6 +9,7 @@ password=Password
 error.technical=Technical Error, please Retry
 validate=Validate
 reset=Reset
+settings=Settings
 
 account.not.validated.check.mail=Account not validated. Check your emails.
 account.successfully.validated=Account successfully validated
