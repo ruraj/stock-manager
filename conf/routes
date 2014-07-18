@@ -7,6 +7,10 @@ GET     /                           controllers.Application.index()
 GET     /dashboard                  controllers.Dashboard.index()
 
 GET     /dealer                     controllers.dealer.Index.index()
+GET     /dealer/new                 controllers.dealer.Register.index()
+POST    /dealer/new                 controllers.dealer.Register.save()
+GET     /dealer/settings            controllers.dealer.settings.Index.index(dealer : Integer ?= null)
+GET     /dealer/detail/$id<[0-9]+>  controllers.dealer.Index.detail(id: Int)
 
 POST    /login                      controllers.Application.authenticate()
 GET     /logout                     controllers.Application.logout()

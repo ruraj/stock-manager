@@ -1,0 +1,131 @@
+@(dealer: Dealer)
+
+@scripts = {
+}
+
+@main(null, scripts) {
+
+  <div>
+    <div class="well">
+        <h3 class="page-title">
+            Dealer: @dealer.name
+        </h3>
+        <hr/>
+        <div class="row">
+            <div class="span6">
+                <div class="ui-box">
+                    <div class="title">
+                        Dealer info:
+                    </div>
+                    <ul class="well-list">
+                        <li>
+                            <span class="light">Name:</span>
+                            <strong>@dealer.name</strong>
+                        </li>
+                        <li>
+                            <span class="light">PAN:</span>
+                            <strong>
+                                @dealer.pan
+                            </strong>
+                        </li>
+                        <li>
+                            <span class="light">Owned by:</span>
+                            <strong>
+                                <a href="/admin/users/ranjan.shrestha">@dealer.owner</a>
+                            </strong>
+                            <div class="pull-right">
+                                <a href="#" class="btn btn-small change-owner-link"><i class="icon-edit"></i>
+                                    Change owner
+                                </a></div>
+                        </li>
+                        <li class="change-owner-holder hide bgred">
+                            <div class="form-holder">
+                                <strong class="cred">New Owner:</strong>
+                                <form accept-charset="UTF-8" action="/admin/groups/software" class="edit_group" id="edit_group_3" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" value="✓" type="hidden"><input name="_method" value="put" type="hidden"><input name="authenticity_token" value="yZNIbCCHhX7d0H4gXUXHJ27d7qJbblpg+1N1H9DEpmU=" type="hidden"></div><div style="width: 400px;" id="s2id_group_owner_id" class="select2-container ajax-users-select"><a href="javascript:void(0)" onclick="return false;" class="select2-choice select2-default" tabindex="-1">   <span>Search for a user</span><abbr class="select2-search-choice-close"></abbr>   <div><b></b></div></a><input id="s2id_autogen5" class="select2-focusser select2-offscreen" type="text"><div class="select2-drop select2-display-none ajax-users-dropdown">   <div class="select2-search select2-search-hidden select2-offscreen">       <input autocomplete="off" autocorrect="off" autocapitilize="off" spellcheck="false" class="select2-input" type="text">   </div>   <ul class="select2-results">   </ul></div></div><input style="" tabindex="-1" class="ajax-users-select  select2-offscreen" id="group_owner_id" name="group[owner_id]" value="" type="hidden">
+                                    <div class="prepend-top-10">
+                                        <input class="btn btn-remove" name="commit" value="Change Owner" type="submit">
+                                        <a href="#" class="btn change-owner-cancel-link">Cancel</a>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </li>
+                        <li>
+                            <span class="light">Created at:</span>
+                            <strong>
+                                August 27, 2013
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ui-box">
+                    <div class="title">
+                        Products
+                        <small>
+                            (@dealer.productCount())
+                        </small>
+                    </div>
+                    <ul class="well-list">
+                        <li>
+                            <strong>
+                                <a href="/admin/projects/software/aepc-monitor">Software / AEPC Monitor</a>
+                            </strong>
+                        </li>
+                        <li>
+                            <strong>
+                                <a href="/admin/projects/software/automatic-school-bell-_asb_">Software / Automatic School Bell _ASB_</a>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="span6">
+                <div class="ui-box">
+                    <div class="title">
+                        Add user(s) to the group:
+                    </div>
+                    <div class="ui-box-body form-holder">
+                        <p class="light">
+                            Read more about project permissions
+                            <strong><a href="/help/permissions" class="vlink">here</a></strong>
+                        </p>
+                        <form accept-charset="UTF-8" action="/admin/groups/software/project_teams_update" class="bulk_import" id="new_team_member" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" value="✓" type="hidden"><input name="_method" value="put" type="hidden"><input name="authenticity_token" value="yZNIbCCHhX7d0H4gXUXHJ27d7qJbblpg+1N1H9DEpmU=" type="hidden"></div>
+                            <div>
+                                <div style="width: 400px;" id="s2id_user_ids" class="select2-container select2-container-multi ajax-users-select multiselect">    <ul class="select2-choices">  <li class="select2-search-field">    <input style="width: 388px;" id="s2id_autogen6" autocomplete="off" autocorrect="off" autocapitilize="off" spellcheck="false" class="select2-input select2-default" type="text">  </li></ul></div><input style="" tabindex="-1" class="ajax-users-select multiselect  select2-offscreen" id="user_ids" name="user_ids" value="" type="hidden">
+                            </div>
+                            <div class="prepend-top-10">
+                                <select style="display: none;" class="project-access-select chosen" id="group_access" name="group_access"><option value="10">Guest</option>
+                                    <option value="20">Reporter</option>
+                                    <option value="30">Developer</option>
+                                    <option value="40">Master</option>
+                                    <option value="50">Owner</option></select><div id="group_access_chosen" title="" style="width: 220px;" class="chosen-container chosen-container-single"><a class="chosen-single" tabindex="-1"><span>Guest</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input autocomplete="off" type="text"></div><ul class="chosen-results"><li data-option-array-index="0" style="" class="active-result result-selected">Guest</li><li data-option-array-index="1" style="" class="active-result">Reporter</li><li data-option-array-index="2" style="" class="active-result">Developer</li><li data-option-array-index="3" style="" class="active-result">Master</li><li data-option-array-index="4" style="" class="active-result">Owner</li></ul></div></div>
+                            </div>
+                            <hr>
+                            <input class="btn btn-create" name="commit" value="Add users into group" type="submit">
+                        </form>
+
+                    </div>
+                </div>
+                <div class="ui-box">
+                    <div class="title">
+                        Group Members
+                        <small>
+                            (@dealer.userCount())
+                        </small>
+                    </div>
+                    <ul class="well-list group-users-list">
+                        <li class="user">
+                            <strong>
+                                <a href="/admin/users/ranjan.shrestha">Ranjan Shrestha</a>
+                            </strong>
+                            <span class="pull-right light">
+                            Owner
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+}

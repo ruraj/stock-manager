@@ -10,6 +10,7 @@ error.technical=Technical Error, please Retry
 validate=Validate
 reset=Reset
 settings=Settings
+register=Register
 
 account.not.validated.check.mail=Account not validated. Check your emails.
 account.successfully.validated=Account successfully validated
@@ -67,3 +68,9 @@ mail.reset.fail.message=You (or someone else) entered this email address when tr
 
 mail.reset.confirm.subject=PlayStartApp - New password
 mail.reset.confirm.message=Hello, <br><br> Your password has been reset.
+
+dealer.new=New Dealer
+dealer.register.successful=Registration successful
+dealer.name=Dealer Name (Company Name)
+dealer.owner=Owner
+dealer.pan=PAN Code

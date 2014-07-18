@@ -1,5 +1,7 @@
 package models;
 
+import models.relations.DealerProduct;
+import models.relations.UserDealer;
 import play.db.ebean.Model;
 
 import javax.persistence.Entity;
@@ -18,4 +20,12 @@ public class Dealer extends Model {
     public String owner;
     
     public String pan;
+
+    public int productCount() {
+        return new Finder(Integer.class, DealerProduct.class).where().eq("dealerId", this.id).findRowCount();
+    }
+
+    public int userCount() {
+        return new Finder(Integer.class, UserDealer.class).where().eq("dealerId", this.id).findRowCount();
+    }
 }

@@ -1,0 +1,142 @@
+@(dealer : Dealer)
+
+@scripts = {
+}
+
+@main(null, scripts) {
+
+    <div class="col-lg-3">
+        <div class="well">
+            <ul class="nav nav-pills nav-stacked nav-stacked-menu">
+                <li class="active">
+                    <a href="#tab-details" data-toggle="tab"><i class="fa fa-edit"></i>Details</a>
+                </li>
+                <li>
+                    <a href="#tab-members" data-toggle="tab"><i class="fa fa-users"></i>Members</a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="col-lg-9">
+        <div class="well">
+            <div class="tab-content">
+                <div id="tab-details" class="tab-pane">
+                    <legend>
+                        Dealer Details
+                    </legend>
+                    <div class="form-holder">
+                        <form accept-charset="UTF-8" action="/android/android-common" class="edit_project" data-remote="true" id="edit_project_148" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" value="✓" type="hidden"><input name="_method" value="put" type="hidden"><input name="authenticity_token" value="yZNIbCCHhX7d0H4gXUXHJ27d7qJbblpg+1N1H9DEpmU=" type="hidden"></div><fieldset>
+                            <div class="control-group project_name_holder">
+                                <label for="project_name">Project name is
+                                </label><div class="controls">
+                                <input class="span5" id="project_name" name="project[name]" placeholder="Example Project" size="30" value="android-common" type="text">
+                            </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="project_description">Project description
+                                    <span class="light">(optional)</span>
+                                </label><div class="controls">
+                                <textarea class="span5" cols="40" id="project_description" maxlength="250" name="project[description]" placeholder="awesome project" rows="3">Common library for Android(Digital Signage) projects</textarea>
+                            </div>
+                            </div>
+                            <div class="control-group">
+                                <label for="project_default_branch">Default Branch</label>
+                                <div class="controls"><select style="display: none;" class="chosen" id="project_default_branch" name="project[default_branch]"><option value="master" selected="selected">master</option></select><div id="project_default_branch_chosen" title="" style="width: 220px;" class="chosen-container chosen-container-single"><a class="chosen-single" tabindex="-1"><span>master</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input autocomplete="off" type="text"></div><ul class="chosen-results"></ul></div></div></div>
+                            </div>
+                        </fieldset>
+                            <fieldset class="public-mode">
+                                <legend>
+                                    Public mode:
+                                </legend>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_public"><span>Public access</span>
+                                    </label><div class="controls">
+                                    <input name="project[public]" value="0" type="hidden"><input id="project_public" name="project[public]" value="1" type="checkbox">
+                                        <span class="descr">
+                                        If checked, this project can be cloned
+                                        <em>without any</em>
+                                        authentication.
+                                        It will also be listed on the <a href="/public">public access directory</a>.
+                                        <em>Any</em>
+                                        user will have <a href="/help/permissions">Guest</a> permissions on the repository.
+                                        </span>
+                                </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="features">
+                                <legend>
+                                    Labels:
+                                </legend>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_label_list">Labels</label>
+                                    <div class="controls">
+                                        <input class="span5" id="project_label_list" maxlength="2000" name="project[label_list]" size="2000" value="" type="text">
+                                        <p class="hint">Separate labels with commas.</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="features">
+                                <legend>
+                                    Features:
+                                </legend>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_issues_enabled">Issues</label>
+                                    <div class="controls">
+                                        <input name="project[issues_enabled]" value="0" type="hidden"><input checked="checked" id="project_issues_enabled" name="project[issues_enabled]" value="1" type="checkbox">
+                                        <span class="descr">Lightweight issue tracking system for this project</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_issues_tracker">Issues tracker</label>
+                                    <div class="controls"><select id="project_issues_tracker" name="project[issues_tracker]"><option value="redmine">redmine</option>
+                                        <option value="gitlab" selected="selected">gitlab</option></select></div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_issues_tracker_id">Project name or id in issues tracker</label>
+                                    <div class="controls"><input disabled="disabled" id="project_issues_tracker_id" name="project[issues_tracker_id]" size="30" type="text"></div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_merge_requests_enabled">Merge Requests</label>
+                                    <div class="controls">
+                                        <input name="project[merge_requests_enabled]" value="0" type="hidden"><input checked="checked" id="project_merge_requests_enabled" name="project[merge_requests_enabled]" value="1" type="checkbox">
+                                        <span class="descr">Submit changes to be merged upstream.</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_wiki_enabled">Wiki</label>
+                                    <div class="controls">
+                                        <input name="project[wiki_enabled]" value="0" type="hidden"><input checked="checked" id="project_wiki_enabled" name="project[wiki_enabled]" value="1" type="checkbox">
+                                        <span class="descr">Pages for project documentation</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_wall_enabled">Wall</label>
+                                    <div class="controls">
+                                        <input name="project[wall_enabled]" value="0" type="hidden"><input id="project_wall_enabled" name="project[wall_enabled]" value="1" type="checkbox">
+                                        <span class="descr">Simple chat system for broadcasting inside project</span>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="project_snippets_enabled">Snippets</label>
+                                    <div class="controls">
+                                        <input name="project[snippets_enabled]" value="0" type="hidden"><input id="project_snippets_enabled" name="project[snippets_enabled]" value="1" type="checkbox">
+                                        <span class="descr">Share code pastes with others out of git repository</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-actions">
+                                <input class="btn btn-save" name="commit" value="Save changes" type="submit">
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <div id="tab-members" class="tab-pane">
+                    Members
+                </div>
+            </div>
+        </div>
+    </div>
+}

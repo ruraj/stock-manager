@@ -1,0 +1,37 @@
+@(signupForm: Form[controllers.dealer.Register.RegistrationForm])
+
+@import helper._
+    @implicitFieldConstructor = @{
+        FieldConstructor(twitterBootstrapInput.render)
+    }
+
+<h3>@Messages("dealer.new")</h3>
+
+@form(controllers.dealer.routes.Register.save()) {
+
+    <fieldset>
+        @inputText(
+            signupForm("name"),
+            'placeholder -> Messages("dealer.name"),
+            '_label -> null,
+            'class -> "form-control"
+        )
+        @inputText(
+            signupForm("owner"),
+            'placeholder -> Messages("dealer.owner"),
+            '_label -> null,
+            'class -> "form-control"
+        )
+        @inputText(
+            signupForm("pan"),
+            '_label -> null,
+            'placeholder -> Messages("dealer.pan"),
+            'class -> "form-control"
+        )
+    </fieldset>
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-primary" value="@Messages("register")" />
+    </div>
+}
+

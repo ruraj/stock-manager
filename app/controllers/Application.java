@@ -12,6 +12,8 @@ import views.html.index;
 
 import static play.data.Form.form;
 
+import controllers.routes;
+
 /**
  * Login and Logout.
  * User: yesnault
