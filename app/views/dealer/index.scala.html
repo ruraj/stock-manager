@@ -1,4 +1,4 @@
-@(dealers: List[Dealer])
+@(dealers: scala.List[Dealer with sorm.Persisted])
 
 @scripts = {
 }
@@ -37,12 +37,12 @@
                     <div class="clearfix light append-bottom-10">
                             <span>
                             <b>Owner:</b>
-                            <a href="/admin/users">@dealer.owner</a>
+                            <a href="/admin/users">@dealer.owner.fullname</a>
                             </span>
                                                 |
                             <span>
                             <b>Products:</b>
-                            <span class="badge">@dealer.productCount()</span>
+                            <span class="badge">@Dealer.productCount(dealer.id)</span>
                             </span>
                     </div>
                     <div class="clearfix">

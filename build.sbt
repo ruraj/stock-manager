@@ -4,12 +4,13 @@ name := """PlayStartApp"""
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.10.1"
 
 libraryDependencies ++= Seq(
   jdbc,
   javaEbean,
   cache,
+  "org.sorm-framework" % "sorm" % "0.3.15",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "com.typesafe" %% "play-plugins-mailer" % "2.2.0",
   filters

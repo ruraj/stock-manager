@@ -1,4 +1,4 @@
-@(signupForm: play.api.data.Form[Dealer])
+@(signupForm: play.api.data.Form[Product])
 
 @import helper._
     @implicitFieldConstructor = @{
@@ -17,13 +17,13 @@
             'class -> "form-control"
         )
         @inputText(
-            signupForm("owner"),
+            signupForm("description"),
             'placeholder -> Messages("dealer.owner"),
             '_label -> null,
             'class -> "form-control"
         )
         @inputText(
-            signupForm("pan"),
+            signupForm("productCode"),
             '_label -> null,
             'placeholder -> Messages("dealer.pan"),
             'class -> "form-control"

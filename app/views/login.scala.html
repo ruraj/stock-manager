@@ -1,4 +1,4 @@
-@(loginForm: Form[Application.Login])
+@(loginForm: play.api.data.Form[Application.Login])
 
 @import helper._
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.render) }
@@ -9,7 +9,7 @@
 
     @if(loginForm.hasGlobalErrors) {
         <p class="error">
-            <span class="label label-danger">@loginForm.globalError.message</span>
+            <span class="label label-danger">@loginForm.globalError.get</span>
         </p>
     }
 

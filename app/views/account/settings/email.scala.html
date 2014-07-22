@@ -1,4 +1,4 @@
-@(user: User, askForm: Form[controllers.account.settings.Email.AskForm])
+@(user: User, askForm: play.api.data.Form[(String,String)])(implicit flash: play.api.mvc.Flash)
 
 @import helper._
 

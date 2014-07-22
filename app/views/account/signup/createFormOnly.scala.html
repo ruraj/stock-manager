@@ -1,4 +1,4 @@
-@(signupForm: Form[Application.Register])
+@(signupForm: play.api.data.Form[Application.Register])(implicit flash: play.api.mvc.Flash)
 
 @import helper._
     @implicitFieldConstructor = @{

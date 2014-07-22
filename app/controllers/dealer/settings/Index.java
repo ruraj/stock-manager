@@ -15,9 +15,9 @@ import static play.mvc.Results.redirect;
  */
 public class Index {
 
-    public static Result index(Integer dealerId) {
+    public static Result index(Long dealerId) {
 
-        if (dealerId == null) {
+        if (dealerId == 0) {
             return redirect(routes.Index.index());
         }
         Dealer dealer = Ebean.find(Dealer.class, dealerId);

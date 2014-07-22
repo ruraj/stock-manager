@@ -1,4 +1,4 @@
-@(resetForm: Form[controllers.account.Reset.ResetForm], token: String)
+@(resetForm: play.api.data.Form[controllers.account.Reset.Reset], token: String)(implicit flash: play.api.mvc.Flash)
 
 @import helper._
     @implicitFieldConstructor = @{

@@ -98,7 +98,7 @@ public class Token extends Model {
     private static Token getNewToken(User user, TypeToken type, String email) {
         Token token = new Token();
         token.token = UUID.randomUUID().toString();
-        token.userId = user.id;
+        token.userId = user.getId();
         token.type = type;
         token.email = email;
         token.save();
@@ -151,7 +151,7 @@ public class Token extends Model {
             case password:
                 subject = Messages.get("mail.reset.ask.subject");
                 message = Messages.get("mail.reset.ask.message", url.toString());
-                toMail = user.email;
+                toMail = user.email();
                 break;
             case email:
                 subject = Messages.get("mail.change.ask.subject");

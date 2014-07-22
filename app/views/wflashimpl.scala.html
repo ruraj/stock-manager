@@ -1,0 +1,10 @@
+@(key: String, value: String)
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@if(value != null) {
+    <p class="">
+        <span class="label label-@key">@value</span>
+    </p>
+}

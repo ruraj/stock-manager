@@ -1,10 +1,9 @@
+@()(implicit flash: play.api.mvc.Flash)
+
 @import helper._
 @import helper.twitterBootstrap._
 
-@flash.map {
-    case (key, value) => {
-        <p class="">
-            <span class="label label-@key">@value</span>
-        </p>
-    }
+@for(key <- scala.List("success", "error", "warning")) {
+
+   @wflashimpl(key, flash.get(key).getOrElse(null))
 }
