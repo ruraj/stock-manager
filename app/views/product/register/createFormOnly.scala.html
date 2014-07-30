@@ -1,31 +1,31 @@
-@(signupForm: play.api.data.Form[Product])
+@(signupForm: play.api.data.Form[Product], dealerId: Long)
 
 @import helper._
     @implicitFieldConstructor = @{
         FieldConstructor(twitterBootstrapInput.render)
     }
 
-<h3>@Messages("dealer.new")</h3>
+<h3>@Messages("product.new")</h3>
 
-@form(controllers.dealer.routes.Register.save()) {
+@form(controllers.dealer.routes.Index.addProduct(dealerId)) {
 
     <fieldset>
         @inputText(
             signupForm("name"),
-            'placeholder -> Messages("dealer.name"),
+            'placeholder -> Messages("product.name"),
             '_label -> null,
             'class -> "form-control"
         )
         @inputText(
             signupForm("description"),
-            'placeholder -> Messages("dealer.owner"),
+            'placeholder -> Messages("product.description"),
             '_label -> null,
             'class -> "form-control"
         )
         @inputText(
             signupForm("productCode"),
             '_label -> null,
-            'placeholder -> Messages("dealer.pan"),
+            'placeholder -> Messages("product.code"),
             'class -> "form-control"
         )
     </fieldset>

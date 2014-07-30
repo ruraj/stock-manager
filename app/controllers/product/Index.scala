@@ -14,13 +14,16 @@ object Index extends Controller {
     Ok(views.html.product.index())
   }
 
-  def add = Action {
-    Ok(views.html.product.register.index(AddProductForm))
+  def add(dealerId: Long) = Action {
+    Ok(views.html.product.register.index(AddProductForm, dealerId))
   }
 
+  def detail(id: Long) = Action {
+    Ok(views.html.product.detail(id))
+  }
   val AddProductForm : Form[Product] = Form (
     mapping(
-      "name" -> text,
+      "name" -> nonEmptyText,
       "description" -> text,
       "productCode" -> text
     )(Product.apply)(Product.unapply)

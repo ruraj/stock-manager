@@ -1,6 +1,7 @@
 package controllers
 
 import models.User
+import play.api.Logger
 import play.api.mvc.Controller
 
 /**
@@ -8,7 +9,7 @@ import play.api.mvc.Controller
  * Date: 22/01/12
  */
 object Dashboard extends Controller with Secured {
-  def index = withAuth { username => implicit request =>
+  def index() = withAuth { username => implicit request =>
     Ok(views.html.dashboard.index(User.findByEmail(username)))
   }
 }

@@ -27,7 +27,7 @@
                     <div class="clearfix">
                         <div class="pull-right prepend-top-10">
                             <a href="@controllers.dealer.settings.routes.Index.index(dealer.id)" class="btn btn-sm btn-default" id="edit_group_13">Edit</a>
-                            <a href="/admin/groups/android" class="btn btn-sm btn-danger" data-confirm="REMOVE @dealer.name? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
+                            <a href="@controllers.dealer.routes.Index.delete(dealer.id)" class="btn btn-sm btn-danger" data-confirm="REMOVE @dealer.name? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
                         </div>
                         <h4>
                             <a href="@controllers.dealer.routes.Index.detail(dealer.id)">@dealer.name

@@ -1,7 +1,6 @@
 package controllers.account
 
-import models.Token
-import models.User
+import models.{Db, TypeToken, Token, User}
 import models.utils.AppException
 import models.utils.Mail
 import org.apache.commons.mail.EmailException
@@ -89,13 +88,13 @@ object Reset extends Controller {
       flash("error", Messages("error.technical"))
       BadRequest(views.html.account.reset.ask(AskForm))
     }
-    val resetToken: Token = Token.findByTokenAndType(token, Token.TypeToken.password)
+    val resetToken: Token = Token.findByTokenAndType(token, TypeToken.password)
     if (resetToken == null) {
       flash("error", Messages("error.technical"))
       BadRequest(views.html.account.reset.ask(AskForm))
     }
     if (resetToken.isExpired) {
-      resetToken.delete
+      Db.delete(resetToken)
       flash("error", Messages("error.expiredresetlink"))
       BadRequest(views.html.account.reset.ask(AskForm))
     }
@@ -112,13 +111,13 @@ object Reset extends Controller {
       BadRequest(views.html.account.reset.reset(resetForm, token))
     }
     try {
-      val resetToken: Token = Token.findByTokenAndType(token, Token.TypeToken.password)
+      val resetToken: Token = Token.findByTokenAndType(token, TypeToken.password)
       if (resetToken == null) {
         flash("error", Messages("error.technical"))
         BadRequest(views.html.account.reset.reset(resetForm, token))
       }
       if (resetToken.isExpired) {
-        resetToken.delete
+        Db.delete(resetToken)
         flash("error", Messages("error.expiredresetlink"))
         BadRequest(views.html.account.reset.reset(resetForm, token))
       }

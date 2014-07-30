@@ -5,6 +5,7 @@ import models.User
 import models.utils.Hash
 import models.utils.Mail
 import org.apache.commons.mail.EmailException
+import org.joda.time.DateTime
 import play.Configuration
 import play.Logger
 import play.api.mvc.{Flash, Controller, Action}
@@ -13,7 +14,7 @@ import play.api.i18n.Messages
 import views.html.account.signup.created
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.UUID
+import java.util.{Date, UUID}
 import views.html.defaultpages.badRequest
 
 import controllers.Application
@@ -58,7 +59,8 @@ object Signup extends Controller {
       resultError
     }
     try {
-      val user: User = new User(register.email, register.fullname, UUID.randomUUID.toString, Hash.createPassword(register.inputPassword), null, false)
+      val user: User = new User(register.email, register.fullname, UUID.randomUUID.toString, Hash.createPassword(register.inputPassword), new DateTime(), false)
+      user.save()
       sendMailAskForConfirmation(user)
       Ok(created())
     }

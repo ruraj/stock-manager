@@ -8,4 +8,4 @@ import sorm.Persisted
 /**
  * Created by ruraj on 7/17/14.
  */
-case class UserDealer(dealerId: Int = 0, users: Set[models.User])
+case class UserDealer(dealerId: Long = 0, users: Set[models.User])

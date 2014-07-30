@@ -1,5 +1,6 @@
 package controllers
 
+import play.api.Logger
 import play.api.mvc._
 
 import models.{Db, User}
@@ -16,6 +17,7 @@ trait Secured {
 
   def withAuth(f: => String => Request[AnyContent] => Result) = {
     Security.Authenticated(username, onUnauthorized) { user =>
+      Logger.debug("Dashboard with user "+user)
       Action(request => f(user)(request))
     }
   }

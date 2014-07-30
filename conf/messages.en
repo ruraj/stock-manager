@@ -74,3 +74,8 @@ dealer.register.successful=Registration successful
 dealer.name=Dealer Name (Company Name)
 dealer.owner=Owner
 dealer.pan=PAN Code
+
+product.new=New Product
+product.name=Product Name
+product.description=Description
+product.code=Product Code

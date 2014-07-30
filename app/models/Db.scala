@@ -8,7 +8,7 @@ import sorm._ //{Entity, Instance}
  */
 object Db extends Instance (
   entities = Set(Entity[User](), Entity[Dealer](), Entity[Product](), Entity[DealerProduct](), Entity[UserDealer]()),
-  url = "jdbc:h2:file:data/db",
+  url = "jdbc:h2:file:sms",
   user = "ruraj",
   password = "password",
   initMode = InitMode.Create

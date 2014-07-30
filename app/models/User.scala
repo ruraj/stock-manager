@@ -34,7 +34,7 @@ object User {
    * @return a user
    */
   def findByEmail(email: String): User with Persisted = {
-    Db.query[User].whereEqual("email", email).fetchOne().get
+    Db.query[User].whereEqual("email", email).fetchOne().orNull
   }
 
   /**
@@ -44,7 +44,7 @@ object User {
    * @return a user
    */
   def findByFullname(fullname: String): User with Persisted = {
-    Db.query[User].whereEqual("fullname", fullname).fetchOne().get
+    Db.query[User].whereEqual("fullname", fullname).fetchOne().orNull
   }
 
   /**
@@ -54,7 +54,7 @@ object User {
    * @return a user if the confirmation token is found, null otherwise.
    */
   def findByConfirmationToken(token: String): User with Persisted = {
-    Db.query[User].whereEqual("confirmationToken", token).fetchOne().get
+    Db.query[User].whereEqual("confirmationToken", token).fetchOne().orNull
   }
 
   /**
@@ -66,7 +66,7 @@ object User {
    * @throws AppException App Exception
    */
   def authenticate(email: String, clearPassword: String): User = {
-    val user: User = Db.query[User].whereEqual("email", email).fetchOne().get
+    val user: User = Db.query[User].whereEqual("email", email).fetchOne().orNull
     if (user != null) {
       if (Hash.checkPassword(clearPassword, user.passwordHash)) {
         user
@@ -88,7 +88,7 @@ object User {
     val nUser : User = Db.query[User]
       .whereEqual("email", user.email)
       .fetchOne()
-      .map(a => a.copy(confirmationToken=null, validated=true)).get
+      .map(a => a.copy(validated=true)).get
 
     Db.save(nUser)
 

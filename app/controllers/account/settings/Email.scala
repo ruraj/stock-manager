@@ -1,8 +1,7 @@
 package controllers.account.settings
 
 import controllers.Secured
-import models.Token
-import models.User
+import models.{TypeToken, Db, Token, User}
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
@@ -68,13 +67,13 @@ object Email extends Controller with Secured {
       flash("error", Messages("error.technical"))
       BadRequest(emailValidate(user))
     }
-    val resetToken: Token = Token.findByTokenAndType(token, Token.TypeToken.email)
+    val resetToken: Token = Token.findByTokenAndType(token, TypeToken.email)
     if (resetToken == null) {
       flash("error", Messages("error.technical"))
       BadRequest(emailValidate(user))
     }
     if (resetToken.isExpired) {
-      resetToken.delete
+      Db.delete(resetToken)
       flash("error", Messages("error.expiredmaillink"))
       BadRequest(emailValidate(user))
     }

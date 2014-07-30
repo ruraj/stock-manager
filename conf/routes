@@ -9,12 +9,15 @@ GET     /dashboard                  controllers.Dashboard.index()
 GET     /dealer                     controllers.dealer.Index.index()
 GET     /dealer/new                 controllers.dealer.Register.index()
 POST    /dealer/new                 controllers.dealer.Register.save()
+GET     /dealer/delete/:id          controllers.dealer.Index.delete(id: Long)
 POST    /dealer/addUser             controllers.dealer.Index.addUser()
-GET     /dealer/addProduct          controllers.product.Index.add()
-POST    /dealer/addProduct          controllers.dealer.Index.addProduct()
+GET     /dealer/addProduct/:id      controllers.product.Index.add(id: Long)
+POST    /dealer/addProduct/:id      controllers.dealer.Index.addProduct(id: Long)
 
 GET     /dealer/settings            controllers.dealer.settings.Index.index(dealer : Long ?= 0)
 GET     /dealer/detail/$id<[0-9]+>  controllers.dealer.Index.detail(id: Long)
+
+GET     /product/detail/$id<[0-9]+> controllers.product.Index.detail(id: Long)
 
 POST    /login                      controllers.Application.authenticate()
 GET     /logout                     controllers.Application.logout()

@@ -1,10 +1,11 @@
 package controllers.dealer
 
+import models.relations.UserDealer
 import models.{Db, User, Dealer}
 import play.api.data.Form
 import play.api.data.Forms._
 
-import play.api.mvc.{Session, Action, Controller}
+import play.api.mvc.{Security, Session, Action, Controller}
 import views.html.helper.form
 
 /**
@@ -16,26 +17,31 @@ object Register extends Controller {
   }
 
   def save = Action { implicit request =>
-    val dealerForm: Form[Dealer] = RegistrationForm.bindFromRequest
+    val dealerForm = RegistrationForm.bindFromRequest
 
     if (dealerForm.hasErrors) {
       BadRequest(views.html.dealer.register.index(dealerForm))
     }
-    val dealer: Dealer = dealerForm.get
-    val id = User.findByEmail(Session().get("email").get).id
+    val (name, pan) = dealerForm.get
+    val user = User.findByEmail(request.session.get(Security.username).get)
+    val dealer: Dealer = new Dealer(name, user.id, pan)
 
-    val newDealer = new Dealer(dealer.name, id, dealer.pan)
+    val newDealer = new Dealer(dealer.name, user.id, dealer.pan)
 
-    Db.save(newDealer)
+    val saved = Db.save(newDealer)
+
+    val userDealer = Db.query[UserDealer].whereEqual("dealerId", saved.id).fetchOne()
+    userDealer.getOrElse({ Db.save(UserDealer(saved.id, Set(user)))})
+    userDealer.map(a => a.copy(users = a.users + user)).map( a => Db.save(a) )
+
     Ok(views.html.dealer.register.created())
   }
 
-  val RegistrationForm : Form[Dealer] = Form (
-    mapping(
+  val RegistrationForm = Form (
+    tuple(
       "name" -> text,
-      "ownerId" -> longNumber,
       "pan" -> text
-    )(Dealer.apply)(Dealer.unapply)
+    )
   )
 
 }

@@ -1,6 +1,7 @@
 package controllers.dealer
 
 import models._
+import models.relations.{UserDealer, DealerProduct}
 import play.api.libs.json.Json
 import sorm.Persisted
 
@@ -34,9 +35,36 @@ object Index extends Controller {
     Ok(Json.toJson(users))
   }
 
-  def addProduct = Action { implicit request =>
-    val product: Product = controllers.product.Index.AddProductForm.bindFromRequest.get
-    Ok(Json.toJson(product)(Json.writes[Product]))
+  def addProduct(dealerId: Long) = Action { implicit request =>
+    val productForm = controllers.product.Index.AddProductForm.bindFromRequest
+    if (productForm.hasErrors) {
+      BadRequest(views.html.product.register.index(productForm, dealerId))
+    } else {
+
+      val product: Product = productForm.get
+
+      val dealer = Db.fetchById[Dealer](dealerId)
+
+      val productP = Db.save(product)
+
+      val dealerProduct = Db.query[DealerProduct].whereEqual("dealerId", dealer.id).fetchOne()
+      dealerProduct.getOrElse({ Db.save(DealerProduct(dealer.id, Set(productP)))})
+      dealerProduct.map(d => d.copy(products = d.products + productP)).map( a => Db.save(a) )
+
+      Ok(views.html.product.register.created())
+    }
+  }
+
+  def delete(dealerId: Long) = Action { implicit request =>
+    val dealer = Db.fetchById[Dealer](dealerId)
+
+    Db.delete(dealer)
+
+    Db.delete(Db.query[UserDealer].whereEqual("dealerId", dealer.id).fetchOne().get)
+
+    Db.query[DealerProduct].whereEqual("dealerId", dealer.id).fetchOne().map(a => if (!a.eq(null)) Db.delete(a))
+
+    Ok(views.html.product.register.created())
   }
   case class Users(users: List[String])
 

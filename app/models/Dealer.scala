@@ -16,21 +16,29 @@ case class Dealer(name: String, ownerId: Long, pan: String) {
 
 object Dealer {
   def productCount(id: Long) : Int = {
-    Db.query[DealerProduct].whereEqual("dealerId", id).fetchOne().get.products.size //Finder[_, _](classOf[Integer], classOf[DealerProduct]).where.eq("dealerId", this.id).findRowCount
+    Db.query[DealerProduct].whereEqual("dealerId", id).fetchOne().getOrElse(new DealerProduct(0, Set())).products.size //Finder[_, _](classOf[Integer], classOf[DealerProduct]).where.eq("dealerId", this.id).findRowCount
   }
 
-  def products(id: Long) : scala.List[Product] = {
-    Db.query[DealerProduct].whereEqual("dealerId", id).fetchOne().get.products.toList
+  def products(id: Long) : Set[Product with Persisted] = {
+    Db.transaction(
+      for (product <- Db.query[DealerProduct].whereEqual("dealerId", id).fetchOne().getOrElse(new DealerProduct(0, Set())).products) yield Db.query[Product].whereEqual("name", product.name).fetchOne().get
+    )
+
+//    Without for
+//
+//    Db.transaction(
+//      Db.query[DealerProduct].whereEqual("dealerId", id).fetchOne().getOrElse(new DealerProduct(0, Set())).products.map(product => Db.query[Product].whereEqual("name", product.name).fetchOne().get)
+//    )
     //    return new Model.Finder[_, _](classOf[Integer], classOf[DealerProduct]).where.eq("dealerId", this.id).findList
   }
 
   def userCount(id: Long) : Long = {
-    Db.query[UserDealer].whereEqual("dealerId", id).fetchOne().get.users.size
+    Db.query[UserDealer].whereEqual("dealerId", id).fetchOne().getOrElse(new UserDealer(0, Set())).users.size
     //    return new Model.Finder[_, _](classOf[Integer], classOf[UserDealer]).where.eq("dealerId", this.id).findRowCount
   }
 
   def users(id: Long) = {
-    Db.query[UserDealer].whereEqual("dealerId", id).fetchOne().get.users.toList
+    Db.query[UserDealer].whereEqual("dealerId", id).fetchOne().getOrElse(new UserDealer(0, Set())).users.toList
     //    val res: List[User] = new ArrayList[User]
     //    import scala.collection.JavaConversions._
     //    for (userDealer <- Ebean.find(classOf[UserDealer]).findList) {
