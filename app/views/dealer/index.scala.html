@@ -8,7 +8,7 @@
   <div>
     <div class="well">
         <h3 class="page-title">
-            Dealers (@dealers.size())
+            Dealers (@dealers.size)
             <small>
                 allows you to see all the registered dealers.
                 And a basic summary.
@@ -26,8 +26,10 @@
                 <li class="list-group-item">
                     <div class="clearfix">
                         <div class="pull-right prepend-top-10">
-                            <a href="@controllers.dealer.settings.routes.Index.index(dealer.id)" class="btn btn-sm btn-default" id="edit_group_13">Edit</a>
-                            <a href="@controllers.dealer.routes.Index.delete(dealer.id)" class="btn btn-sm btn-danger" data-confirm="REMOVE @dealer.name? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
+                            <a href="@controllers.dealer.settings.routes.Index.index(dealer.id)" class="btn btn-sm btn-default" id="edit_group_13">
+                                <i class="fa fa-edit"></i>Edit</a>
+                            <a href="@controllers.dealer.routes.Index.delete(dealer.id)" class="btn btn-sm btn-danger" data-confirm="REMOVE @dealer.name? Are you sure?" data-method="delete" rel="nofollow">
+                                <i class="fa fa-trash-o"></i>Destroy</a>
                         </div>
                         <h4>
                             <a href="@controllers.dealer.routes.Index.detail(dealer.id)">@dealer.name
@@ -36,19 +38,23 @@
                     </div>
                     <div class="clearfix light append-bottom-10">
                             <span>
-                            <b>Owner:</b>
-                            <a href="/admin/users">@dealer.owner.fullname</a>
+                                <b>Owner:</b>
+                                <a href="/admin/users">@dealer.owner.fullname</a>
                             </span>
                                                 |
                             <span>
-                            <b>Products:</b>
-                            <span class="badge">@Dealer.productCount(dealer.id)</span>
+                                <b>Products:</b>
+                                <span class="badge">@Dealer.productCount(dealer.id)</span>
                             </span>
                     </div>
                     <div class="clearfix">
                         <p>
                             <b>PAN:</b>@dealer.pan
                         </p>
+                        <span>
+                            <a class="btn btn-sm" href="@controllers.report.routes.Transaction.index(dealer.id)"><i class="fa fa-money"></i>Transaction Report</a>
+                            <a class="btn btn-sm"><i class="fa fa-bar-chart-o"></i>Stock Report</a>
+                        </span>
                     </div>
                 </li>
             }

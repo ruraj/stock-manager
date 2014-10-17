@@ -72,14 +72,15 @@
                         <small>
                             (@Dealer.productCount(dealer.id))
                         </small>
-                        <a class="btn btn-success pull-right" href="@controllers.product.routes.Index.add(dealer.id)"><i class="fa fa-plus-circle"></i>Add New</a>
+                        <a class="btn btn-success btn-xs pull-right" href="@controllers.product.routes.Index.add(dealer.id)"><i class="fa fa-plus-circle"></i>Add New</a>
                     </div>
                     <ul class="well-list">
                         @for(product <- Dealer.products(dealer.id)) {
                             <li>
                                 <strong>
-                                    <a href="/product/detail/@product.id">@product.name</a>
+                                    <a href="@controllers.product.routes.Index.detail(product.id)">@product.name</a>
                                 </strong>
+                                <a href="@controllers.product.routes.Transaction.doTransaction(product.id)" class="btn btn-info btn-xs pull-right">Transact</a>
                             </li>
                         }
 

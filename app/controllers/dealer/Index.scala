@@ -41,7 +41,9 @@ object Index extends Controller {
       BadRequest(views.html.product.register.index(productForm, dealerId))
     } else {
 
-      val product: Product = productForm.get
+      val params = productForm.get
+
+      val product = Product(params._1, params._2, params._3, Set[Feature]())
 
       val dealer = Db.fetchById[Dealer](dealerId)
 
