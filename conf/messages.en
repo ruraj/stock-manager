@@ -79,3 +79,9 @@ product.new=New Product
 product.name=Product Name
 product.description=Description
 product.code=Product Code
+
+feature.new=New Feature
+feature.add.successful=Feature added
+
+item.new=New Item
+item.add.successful=Item added

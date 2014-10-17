@@ -3,48 +3,68 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
-GET     /dashboard                  controllers.Dashboard.index()
+GET         /                                      controllers.Application.index()
+GET         /dashboard                             controllers.Dashboard.index()
 
-GET     /dealer                     controllers.dealer.Index.index()
-GET     /dealer/new                 controllers.dealer.Register.index()
-POST    /dealer/new                 controllers.dealer.Register.save()
-GET     /dealer/delete/:id          controllers.dealer.Index.delete(id: Long)
-POST    /dealer/addUser             controllers.dealer.Index.addUser()
-GET     /dealer/addProduct/:id      controllers.product.Index.add(id: Long)
-POST    /dealer/addProduct/:id      controllers.dealer.Index.addProduct(id: Long)
+# Dealer ops
+GET         /dealer                                controllers.dealer.Index.index()
+GET         /dealer/new                            controllers.dealer.Register.index()
+POST        /dealer/new                            controllers.dealer.Register.save()
+GET         /dealer/delete/:id                     controllers.dealer.Index.delete(id: Long)
+POST        /dealer/addUser                        controllers.dealer.Index.addUser()
+GET         /dealer/addProduct/:id                 controllers.product.Index.add(id: Long)
+POST        /dealer/addProduct/:id                 controllers.dealer.Index.addProduct(id: Long)
+GET         /dealer/settings                       controllers.dealer.settings.Index.index(dealer : Long ?= 0)
+GET         /dealer/detail/$id<[0-9]+>             controllers.dealer.Index.detail(id: Long)
 
-GET     /dealer/settings            controllers.dealer.settings.Index.index(dealer : Long ?= 0)
-GET     /dealer/detail/$id<[0-9]+>  controllers.dealer.Index.detail(id: Long)
+# Product ops
+GET         /product/detail/$id<[0-9]+>            controllers.product.Index.detail(id: Long)
+GET         /product/addfeature/$id<[0-9]+>        controllers.product.Index.addFeature(id: Long)
+POST        /product/addfeature/:id                controllers.product.Index.addFeature(id: Long)
 
-GET     /product/detail/$id<[0-9]+> controllers.product.Index.detail(id: Long)
+# Product features
+GET         /product/feature/:id                   controllers.product.Feature.values(id: String)
+POST        /product/feature/delete/:id            controllers.product.Feature.delete(id: String)
+POST        /product/feature/value/                controllers.product.Feature.addValue(code: String)
 
-POST    /login                      controllers.Application.authenticate()
-GET     /logout                     controllers.Application.logout()
+# Product Item ops
+GET         /product/item/add                      controllers.product.Item.add(code: String)
+POST        /product/item/addItem                  controllers.product.Item.addItem(code: String)
 
-GET     /settings                   controllers.account.settings.Index.index()
-GET     /settings/password          controllers.account.settings.Password.index()
-POST    /settings/password          controllers.account.settings.Password.runPassword()
-GET     /settings/email             controllers.account.settings.Email.index()
-POST    /settings/email             controllers.account.settings.Email.runEmail()
+# Transaction ops
+GET         /product/do                            controllers.product.Transaction.doTransaction(pId: Long)
+POST        /product/do                            controllers.product.Transaction.doSave(pId: Long)
+
+# Report ops
+GET         /dealer/report/transaction             controllers.report.Transaction.index(dId: Long)
+GET         /dealer/report/transaction             controllers.report.Transaction.showMe()
+# User ops
+POST        /login                                 controllers.Application.authenticate()
+GET         /logout                                controllers.Application.logout()
+
+GET         /settings                              controllers.account.settings.Index.index()
+GET         /settings/password                     controllers.account.settings.Password.index()
+POST        /settings/password                     controllers.account.settings.Password.runPassword()
+GET         /settings/email                        controllers.account.settings.Email.index()
+POST        /settings/email                        controllers.account.settings.Email.runEmail()
 
 # Registers the user, sending an email to confirm the account.
-GET     /signup                     controllers.account.Signup.create()
-POST    /signup                     controllers.account.Signup.save()
+GET         /signup                                controllers.account.Signup.create()
+POST        /signup                                controllers.account.Signup.save()
 
 # Accessed when the user confirms the registration.
-GET     /confirm/:confirmToken      controllers.account.Signup.confirm(confirmToken:String)
+GET         /confirm/:confirmToken                 controllers.account.Signup.confirm(confirmToken:String)
 
 # Displays a page to send a reset email given the user's email.
-GET     /reset/ask                  controllers.account.Reset.ask()
-POST    /reset/ask                  controllers.account.Reset.runAsk()
+GET         /reset/ask                             controllers.account.Reset.ask()
+POST        /reset/ask                             controllers.account.Reset.runAsk()
 
 # Resets the password using the password.
-GET     /reset/:token               controllers.account.Reset.reset(token:String)
-POST    /reset/:token               controllers.account.Reset.runReset(token:String)
+GET         /reset/:token                          controllers.account.Reset.reset(token:String)
+POST        /reset/:token                          controllers.account.Reset.runReset(token:String)
 
-GET     /email/:token               controllers.account.settings.Email.validateEmail(token:String)
+GET         /email/:token                          controllers.account.settings.Email.validateEmail(token:String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET         /assets/*file                          controllers.Assets.at(path="/public", file)
 
