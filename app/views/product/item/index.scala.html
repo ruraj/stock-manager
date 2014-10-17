@@ -1,0 +1,58 @@
+@(dealers: scala.List[Dealer with sorm.Persisted])
+
+@scripts = {
+}
+
+@main(null, scripts) {
+
+  <div>
+    <div class="well">
+        <h3 class="page-title">
+            Dealers (@dealers.size())
+            <small>
+                allows you to see all the registered dealers.
+                And a basic summary.
+            </small>
+        </h3>
+        <a id="add-product" class="btn btn-success pull-right" href="@controllers.dealer.routes.Register.index()"><i class="fa fa-plus-circle"></i>Register New</a>
+        <form accept-charset="UTF-8" action="/dealers" class="form-inline" method="get">
+            <div style="margin:0;padding:0;display:inline"><input name="utf8" value="✓" type="hidden"></div>
+            <input class="form-control" id="name" name="name" type="text">
+            <input class="btn submit btn-primary" name="commit" value="Search" type="submit">
+        </form>
+        <br/>
+        <ul class="list-group">
+            @for(dealer <- dealers) {
+                <li class="list-group-item">
+                    <div class="clearfix">
+                        <div class="pull-right prepend-top-10">
+                            <a href="@controllers.dealer.settings.routes.Index.index(dealer.id)" class="btn btn-sm btn-default" id="edit_group_13">Edit</a>
+                            <a href="@controllers.dealer.routes.Index.delete(dealer.id)" class="btn btn-sm btn-danger" data-confirm="REMOVE @dealer.name? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
+                        </div>
+                        <h4>
+                            <a href="@controllers.dealer.routes.Index.detail(dealer.id)">@dealer.name
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="clearfix light append-bottom-10">
+                            <span>
+                            <b>Owner:</b>
+                            <a href="/admin/users">@dealer.owner.fullname</a>
+                            </span>
+                                                |
+                            <span>
+                            <b>Products:</b>
+                            <span class="badge">@Dealer.productCount(dealer.id)</span>
+                            </span>
+                    </div>
+                    <div class="clearfix">
+                        <p>
+                            <b>PAN:</b>@dealer.pan
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+  </div>
+}

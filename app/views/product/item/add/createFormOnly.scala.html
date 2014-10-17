@@ -1,0 +1,34 @@
+@(product: models.Product, formO: play.api.data.Form[models.Item])
+
+@import helper._
+    @implicitFieldConstructor = @{
+        FieldConstructor(twitterBootstrapInput.render)
+    }
+
+<h3>@Messages("item.new")</h3>
+
+@if(product.featureCount() > 0) {
+    @form(controllers.product.routes.Item.addItem(product.productCode)) {
+        <fieldset>
+            @inputText(
+                formO("productCode"),
+                '_label -> null,
+                'class -> "hidden"
+            )
+            @inputText(
+                formO("itemCode"),
+                'placeholder -> "Item code (can be anything)",
+                '_label -> null,
+                'class -> "form-control"
+            )
+            @views.html.product.item.createFieldsOnly(product, formO)
+        </fieldset>
+
+        <div class="form-actions">
+            <input type="submit" class="btn btn-primary" value='@Messages("register")' />
+        </div>
+    }
+} else {
+    No features have been defined for this product
+}
+

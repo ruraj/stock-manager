@@ -1,0 +1,94 @@
+@(product: models.Product with sorm.Persisted, formO: play.api.data.Form[models.Feature])
+
+@import helper._
+    @implicitFieldConstructor = @{
+        FieldConstructor(twitterBootstrapInput.render)
+    }
+
+<h3>@Messages("feature.new")</h3>
+
+@form(controllers.product.routes.Index.addFeature(product.id)) {
+
+    <fieldset>
+        @inputText(
+            formO("name"),
+            'placeholder -> "Feature name",
+            '_label -> null,
+            'class -> "form-control"
+        )
+        @inputText(
+            formO("description"),
+            '_label -> null,
+            'placeholder -> "Description",
+            'class -> "form-control"
+        )
+        @inputText(
+            formO("unit"),
+            '_label -> null,
+            'placeholder -> "Unit",
+            'class -> "form-control"
+        )
+        @select(
+            formO("data-type"),
+            options=Seq("text"->"Text", "number"->"Number"),
+            '_label -> "Feature data type"
+        )
+        @select(
+            formO("value-type"),
+            options=Seq("fixed"->"Fixed", "list"->"List", "derived"->"Derived"),
+            '_label -> "Feature value type"
+        )
+
+        <div class="ui-box" id="derivation-box" style="display:none">
+            <div class="title">Derived Parameter Builder</div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="panel panel-default">
+                    	<div class="panel-body">
+                            @*<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 btn btn-primary expr">=</div>*@
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 btn btn-primary expr">+</div>
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 btn btn-primary expr">-</div>
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 btn btn-primary expr">*</div>
+                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 btn btn-primary expr">/</div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 btn btn-danger clear-button">Clear</div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
+                                <input type="text" class="form-control" id="numeric-value">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="numeric-button">Add</button>
+                                </span>
+                            </div>
+
+                            @for(feature <- product.features) {
+                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 btn btn-default expr">@feature.name</div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="panel panel-info">
+                    	  <div class="panel-heading">
+                    			<h3 class="panel-title">Derived feature formula:</h3>
+                    	  </div>
+                    	  <div class="panel-body">
+                              @inputText(
+                                formO("derivation"),
+                                '_label->null,
+                                'class->"hidden",
+                                'value->""
+                              )
+                              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 btn btn-success disabled">=</div>
+                              <div id="derivation-body">
+
+                              </div>
+                    	  </div>
+                    </div>
+                </div>
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <input type="submit" class="btn btn-primary" value='@Messages("register")' />
+    </div>
+}
+

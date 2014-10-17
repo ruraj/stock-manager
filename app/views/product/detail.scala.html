@@ -1,0 +1,86 @@
+@(product : Product with sorm.Persisted)
+
+@scripts = {
+}
+
+@main(null, scripts) {
+<div class="well">
+    <h3 class="page-title">
+        Product: @product.name <small>(@product.description)</small>
+    </h3>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ui-box">
+                <div class="title">
+                    Features <small>(@product.featureCount)</small>
+                    <a class="btn btn-sm btn-primary pull-right" href="@controllers.product.routes.Index.addFeature(product.id)"><i class="fa fa-plus-circle"></i>Add</a>
+                </div>
+                <ul class="list-group">
+                    @for(feature <- product.features) {
+                    <li class="list-group-item">
+                        <div class="clearfix">
+                            <div class="pull-right prepend-top-10">
+                                @if(feature.valueType.equals("list")) {
+                                    <a href="@controllers.product.routes.Feature.values(feature.code)" class="btn btn-sm btn-default" id="edit_group_13">Edit Values</a>
+                                }
+                                <a href="@controllers.product.routes.Feature.delete(feature.code)" class="btn btn-sm btn-danger" data-confirm="REMOVE @feature.name? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
+                            </div>
+                            <h4>
+                                <a href="@controllers.dealer.routes.Index.detail(1)">@feature.name @if(feature.unit != null && !feature.unit.isEmpty){(@feature.unit)}</a>
+                            </h4>
+                            <small>@feature.description</small>
+                        </div>
+                        <div class="clearfix light append-bottom-10">
+                            <span>
+                            <b>Data Type:</b>
+                            @feature.dataType
+                            </span>
+                            |
+                            <span>
+                            <b>Value Type:</b>
+                            @feature.valueType
+                            </span>
+                        </div>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="ui-box">
+                <div class="title">
+                    Items <small>(@product.itemCount)</small>
+                    <a class="btn btn-sm btn-primary pull-right" href="@controllers.product.routes.Item.add(product.productCode)"><i class="fa fa-plus-circle"></i>Add</a>
+                </div>
+                <ul class="list-group">
+                    @for(item <- product.items) {
+                    <li class="list-group-item">
+                        <div class="clearfix">
+                            <div class="pull-right prepend-top-10">
+                                <a href="@controllers.product.routes.Feature.values(item.code)" class="btn btn-sm btn-default" id="edit_group_13">Edit</a>
+                                <a href="@controllers.product.routes.Feature.delete(item.code)" class="btn btn-sm btn-danger" data-confirm="REMOVE @item.code? Are you sure?" data-method="delete" rel="nofollow">Destroy</a>
+                            </div>
+                            <h4>
+                                <a href="@controllers.dealer.routes.Index.detail(1)">@item.code</a>
+                            </h4>
+                        </div>
+                        <div class="clearfix light append-bottom-10">
+                            @for(value <- item.values) {
+                                <span>
+                                <b>
+                                    @Db.query[Feature].whereEqual("code", Db.query[FeatureValue].whereEqual("valueCode", value.code).fetchOne().get.featureCode).fetchOne().get.name
+                                </b>:
+                                @value.value
+                                </span>
+                                |
+                            }
+                        </div>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+}

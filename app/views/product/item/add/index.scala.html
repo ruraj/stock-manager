@@ -1,0 +1,17 @@
+@(product: models.Product, form: play.api.data.Form[models.Item])
+
+    @scripts = {
+        <script src="@routes.Assets.at("javascripts/add.item.js")"></script>
+    }
+
+@main(null, scripts) {
+    <div class="span3">
+            &nbsp;
+    </div>
+
+    <div class="span12">
+        <div class="well">
+        @createFormOnly(product, form)
+        </div>
+    </div>
+}

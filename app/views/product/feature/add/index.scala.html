@@ -1,0 +1,17 @@
+@(product: models.Product with sorm.Persisted, form: play.api.data.Form[models.Feature])
+
+    @scripts = {
+        <script src="@routes.Assets.at("javascripts/add.feature.js")" type="text/javascript"></script>
+    }
+
+@main(null, scripts) {
+    <div class="span3">
+            &nbsp;
+    </div>
+
+    <div class="span12">
+        <div class="well">
+        @createFormOnly(product, form)
+        </div>
+    </div>
+}

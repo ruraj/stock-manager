@@ -1,0 +1,63 @@
+@(feature: models.Feature with sorm.Persisted, formO: play.api.data.Form[models.Value])
+
+@import helper._
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@scripts = {
+}
+
+@main(null, scripts) {
+
+  <div>
+    <div class="well">
+        <h3 class="page-title">
+            @feature.name
+            <small>
+                allows you to see all the values related to this feature.
+            </small>
+        </h3>
+        <br/>
+
+        @if(feature.valueType.equals("list")) {
+            @form(controllers.product.routes.Feature.addValue(feature.code)) {
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        @inputText(
+                            formO("name"),
+                            '_label -> "Name",
+                            'class -> "form-control"
+                        )
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        @inputText(
+                            formO("value"),
+                            '_label -> "Value",
+                            'type -> feature.dataType,
+                            'class -> "form-control"
+                        )
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <input class="btn submit btn-primary" name="commit" value="Add" type="submit">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="list-group">
+                        @if(feature.values.size > 0) {
+                            @for(value <- feature.values) {
+                            <li class="list-group-item">@value.name (@value.value @feature.unit)</li>
+                            }
+                        } else {
+                        <li class="list-group-item" id="nothing-added">Nothing added</li>
+                        }
+                    </ul>
+                </div>
+            }
+        } else {
+            Values cannot be added to this kind of feature (fixed/none)
+        }
+
+    </div>
+  </div>
+}
