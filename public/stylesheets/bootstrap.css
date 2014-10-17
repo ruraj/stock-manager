@@ -5106,8 +5106,8 @@ button.close {
   left: 0;
   z-index: 1050;
   display: none;
-  overflow: auto;
-  overflow-y: scroll;
+  //overflow: auto;
+  //overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
