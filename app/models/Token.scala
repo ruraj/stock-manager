@@ -2,12 +2,11 @@ package models
 
 import models.TypeToken.TypeToken
 import models.utils.Mail
+import org.joda.time.DateTime
 import play.Configuration
 import play.api.Logger
 import play.api.i18n.Messages
 import java.net.URL
-import java.util.Calendar
-import java.util.Date
 import java.util.UUID
 
 object TypeToken extends Enumeration("reset", "email") {
@@ -15,21 +14,20 @@ object TypeToken extends Enumeration("reset", "email") {
   val password, email = Value
 }
 
-case class Token(token: String, userId: Long, tokenType: TypeToken, dateCreation: Date, email: String) {
+case class Token(token: String, userId: Long, tokenType: TypeToken, dateCreation: DateTime, email: String) {
   /**
     * @return true if the reset token is too old to use, false otherwise.
    */
   def isExpired: Boolean = {
-    dateCreation != null && dateCreation.before(expirationTime)
+    dateCreation != null && dateCreation.isBefore(expirationTime)
   }
   private final val EXPIRATION_DAYS: Int = 1
   /**
     * @return a date before which the password link has expired.
    */
-  private def expirationTime: Date = {
-    val cal: Calendar = Calendar.getInstance
-    cal.set(Calendar.DATE, -EXPIRATION_DAYS)
-    cal.getTime
+  private def expirationTime: DateTime = {
+    val cal: DateTime = DateTime.now()
+    cal.minusDays(EXPIRATION_DAYS)
   }
 }
 
@@ -59,7 +57,7 @@ object Token {
    * @return a reset token
    */
   private def getNewToken(user: User, tokenType: TypeToken, email: String): Token = {
-    val token: Token = new Token(UUID.randomUUID.toString, user.getId, tokenType, new Date(), email)
+    val token: Token = new Token(UUID.randomUUID.toString, user.getId, tokenType, DateTime.now, email)
     Db.save(token)
   }
 
