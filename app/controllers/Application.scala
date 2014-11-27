@@ -18,7 +18,7 @@ object Application extends Controller {
    * @return login page or dashboard
    */
   def index() = Action { implicit request =>
-    val email: Option[String] = request.session.get("email")
+    val email: Option[String] = request.session.get(Security.username)
     if (email.isDefined) {
       Logger.debug("Index run as "+email)
       val user: User = User.findByEmail(email.get)
