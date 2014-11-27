@@ -1,0 +1,59 @@
+@(dealer: models.Dealer with sorm.Persisted)
+
+@import helper._
+
+@scripts = {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/datepicker3.css")"/>
+    <script src="@routes.Assets.at("javascripts/jquery.form.min.js")"></script>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery.dataTables.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.tableTools.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.colVis.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.colReorder.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.responsive.css")"/>
+    <script src="@routes.Assets.at("javascripts/jquery.dataTables.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.tableTools.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.colVis.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.colReorder.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.responsive.min.js")"></script>
+
+    <script src="@routes.Assets.at("javascripts/stock.js")"></script>
+}
+@main(null, scripts) {
+    <h3 class="page-title">Stock Reports</h3>
+    <div class="well">
+        @form(controllers.report.routes.Stock.showMe(), 'id -> "form") {
+            <div class="ui-box">
+                <div class="title">Search criteria</div>
+                <div class="ui-box-body">
+                    <div class="row">
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <p><label for="product-code">Product code</label></p>
+
+                            <select name="product-code" id="product-code" class="form-control" size="1">
+                                @for(product <- Dealer.products(dealer.id)) {
+                                    <option value="@product.productCode" title="@product.description">@product.name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><button class="btn btn-sm btn-success" id="generate-button"><i class="fa fa-check"></i>Generate</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <table class="table-responsive" id="data-table">
+                    <thead>
+                        <tr id="header-row">
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    </tbody>
+                    <tfoot>
+                        <tr id="footer-row">
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+    </div>
+}
