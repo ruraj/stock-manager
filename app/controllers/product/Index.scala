@@ -39,7 +39,7 @@ object Index extends Controller {
 
       val feature = Db.save(featureT)
 
-      Db.query[Product].whereEqual("id", id).fetchOne().map(p => p.copy(features = p.features + feature)).map(p => Db.save(p))
+      Db.save(ProductFeature(id, feature.id))
 
       Ok(views.html.product.feature.add.created())
     }
@@ -62,7 +62,7 @@ object Index extends Controller {
       "derivation" -> text
     ) {
       (name, description, unit, datatype, valuetype, derivation) => {
-        models.Feature(null,name,description,unit,datatype,valuetype,derivation,Set())
+        models.Feature(null,name,description,unit,datatype,valuetype)
       }
     }
     {

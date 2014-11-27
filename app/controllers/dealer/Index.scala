@@ -43,7 +43,7 @@ object Index extends Controller {
 
       val params = productForm.get
 
-      val product = Product(params._1, params._2, params._3, Set[Feature]())
+      val product = Product(params._1, params._2, params._3)
 
       val dealer = Db.fetchById[Dealer](dealerId)
 

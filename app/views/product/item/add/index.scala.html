@@ -1,7 +1,8 @@
-@(product: models.Product, form: play.api.data.Form[models.Item])
+@(product: models.Product with sorm.Persisted, form: play.api.data.Form[(Int, String, scala.collection.immutable.List[(Int, Int, String)])])
 
     @scripts = {
         <script src="@routes.Assets.at("javascripts/add.item.js")"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.form.min.js")"></script>
     }
 
 @main(null, scripts) {

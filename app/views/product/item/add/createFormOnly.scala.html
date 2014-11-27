@@ -1,4 +1,4 @@
-@(product: models.Product, formO: play.api.data.Form[models.Item])
+@(product: models.Product with sorm.Persisted, formO: play.api.data.Form[(Int, String, scala.collection.immutable.List[(Int, Int, String)])])
 
 @import helper._
     @implicitFieldConstructor = @{
@@ -7,17 +7,17 @@
 
 <h3>@Messages("item.new")</h3>
 
-@if(product.featureCount() > 0) {
-    @form(controllers.product.routes.Item.addItem(product.productCode)) {
+@if(Product.featureCount(product.id) > 0) {
+    @form(controllers.product.routes.Item.addItem(product.productCode), 'id->"my-form") {
         <fieldset>
             @inputText(
-                formO("productCode"),
-                '_label -> null,
+                formO("productId").copy(value = Option[String](product.id.toString)),
+                args = '_label -> null,
                 'class -> "hidden"
             )
             @inputText(
-                formO("itemCode"),
-                'placeholder -> "Item code (can be anything)",
+                formO("itemCode").copy(value = Option[String](product.productCode +"-I"+(Db.query[Item].count()+1))),
+                args = 'placeholder -> "Item code (can be anything)",
                 '_label -> null,
                 'class -> "form-control"
             )

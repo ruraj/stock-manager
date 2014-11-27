@@ -1,7 +1,7 @@
 package controllers.product
 
 import controllers.Application
-import models.{FeatureValue, Value, Feature, Db}
+import models.{ValueFeature, Value, Feature, Db}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.{Action, Controller}
@@ -28,11 +28,9 @@ object Feature extends Controller {
 
     val randomCode = code + "-V" + Db.query[Value].count()
 
-    Db.save(FeatureValue(feature.get.code, randomCode))
-
     val value = Db.save(valueT.copy(code = randomCode))
 
-    feature.map(f => f.copy(values = f.values + value)).map(f => Db.save(f))
+    Db.save(ValueFeature(value.id, feature.get.id))
 
     Redirect(controllers.product.routes.Feature.values(feature.get.code))
   }

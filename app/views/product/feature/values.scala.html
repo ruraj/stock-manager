@@ -44,12 +44,14 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <ul class="list-group">
-                        @if(feature.values.size > 0) {
-                            @for(value <- feature.values) {
-                            <li class="list-group-item">@value.name (@value.value @feature.unit)</li>
+                        @defining(Feature.valuesFor(feature.id)) { values =>
+                            @if(values.size > 0) {
+                                @for(value <- values) {
+                                    <li class="list-group-item">@value.name (@value.value @feature.unit)</li>
+                                }
+                            } else {
+                                <li class="list-group-item" id="nothing-added">Nothing added</li>
                             }
-                        } else {
-                        <li class="list-group-item" id="nothing-added">Nothing added</li>
                         }
                     </ul>
                 </div>

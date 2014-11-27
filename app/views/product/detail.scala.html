@@ -13,11 +13,11 @@
         <div class="col-lg-4">
             <div class="ui-box">
                 <div class="title">
-                    Features <small>(@product.featureCount)</small>
+                    Features <small>(@Product.featureCount(product.id)</small>
                     <a class="btn btn-sm btn-primary pull-right" href="@controllers.product.routes.Index.addFeature(product.id)"><i class="fa fa-plus-circle"></i>Add</a>
                 </div>
                 <ul class="list-group">
-                    @for(feature <- product.features) {
+                    @for(feature <- Product.features(product.id)) {
                     <li class="list-group-item">
                         <div class="clearfix">
                             <div class="pull-right prepend-top-10">
@@ -50,11 +50,11 @@
         <div class="col-lg-8">
             <div class="ui-box">
                 <div class="title">
-                    Items <small>(@product.itemCount)</small>
+                    Items <small>(@Product.itemCount(product.id)</small>
                     <a class="btn btn-sm btn-primary pull-right" href="@controllers.product.routes.Item.add(product.productCode)"><i class="fa fa-plus-circle"></i>Add</a>
                 </div>
                 <ul class="list-group">
-                    @for(item <- product.items) {
+                    @for(item <- Product.items(product.id)) {
                     <li class="list-group-item">
                         <div class="clearfix">
                             <div class="pull-right prepend-top-10">
@@ -66,12 +66,12 @@
                             </h4>
                         </div>
                         <div class="clearfix light append-bottom-10">
-                            @for(value <- item.values) {
+                            @for(value <- Item.valuesFor(item.id)) {
                                 <span>
                                 <b>
-                                    @Db.query[Feature].whereEqual("code", Db.query[FeatureValue].whereEqual("valueCode", value.code).fetchOne().get.featureCode).fetchOne().get.name
+                                    @Db.fetchById[Feature](value._1).name
                                 </b>:
-                                @value.value
+                                @value._2.value
                                 </span>
                                 |
                             }

@@ -1,4 +1,4 @@
-@(product: models.Product, formO: play.api.data.Form[models.Item], colSize: Integer = 2)
+@(product: models.Product with sorm.Persisted, formO: play.api.data.Form[(Int, String, scala.collection.immutable.List[(Int, Int, String)])], colSize: Integer = 2)
 
 @import helper._
 @implicitFieldConstructor = @{
@@ -8,35 +8,36 @@
 <fieldset>
     <div class="row">
     @helper.repeat(formO("values")) { dataMap =>
-        <div class="col-xs-@colSize col-sm-@colSize col-md-@colSize col-lg-@colSize">
-            @defining[Feature](Db.query[Feature].whereEqual("code", dataMap("featureCode").value.get).fetchOne().get) { feature =>
+        @for(feature <- Product.features(product.id)) {
+            <div class="col-xs-@colSize col-sm-@colSize col-md-@colSize col-lg-@colSize my-field">
                 <div class="ui-box">
                     <div class="title">
-                        @feature.name @if(feature.unit != null){(@feature.unit)}
-                    </div>
+                    @feature.name @if(feature.unit != null){(@feature.unit)}
+                </div>
                     <ul>
                         <li class="list-group-item">
-                            @inputText(
-                                dataMap("featureCode"),
-                                'class -> "hidden",
-                                '_label -> null
+                        @inputText(
+                            dataMap("featureId").copy(value = Option[String](feature.id.toString)),
+                            'class -> "hidden",
+                            '_label -> null
                             )
-                            <input id="@dataMap("valueCode").name" name="@dataMap("valueCode").name" hidden />
-                            <input id="@dataMap("value").name" name="@dataMap("value").name" class="form-control @feature.valueType" data-formula="@feature.derivation" onkeypress="calc()" /*@if(!feature.valueType.equals("fixed")){readonly}*/ />
+                            <input id="@dataMap("valueId").name" name="@dataMap("valueId").name" hidden />
+                            <input id="@dataMap("value").name" name="@dataMap("value").name" class="form-control @feature.valueType" data-formula="@Feature.formulaFor(feature.id)" onkeypress="calc()" /*@if(!feature.valueType.equals("fixed")){readonly}*/ />
                         </li>
                         @if(feature.valueType.equals("list")) {
                             <li class="list-group-item">
                                 <select id="junk" class="form-control" size="5">
-                                @for(value <- feature.values) {
-                                    <option name="@dataMap("valueCode").name" data-to="@dataMap("value").name" data-code="@value.code" data-value="@value.value">@value.name (@value.value @feature.unit)</option>
+                                @for(value <- Feature.valuesFor(feature.id)) {
+                                    <option name="@dataMap("valueId").name" data-to="@dataMap("value").name" data-code="@value.id" data-value="@value.value">@value.name (@value.value @feature.unit)</option>
                                 }
                                 </select>
                             </li>
                         }
                     </ul>
                 </div>
-            }
-        </div>
+            </div>
+        }
     }
     </div>
+    <script>renumberDataMap()</script>
 </fieldset>

@@ -13,54 +13,24 @@ import play.api.mvc.{Action, Controller}
 object Item extends Controller{
 
 
-  val AddItemForm: Form[models.Item] = Form(
-    mapping (
-      "productCode" -> nonEmptyText,
+  val AddItemForm = Form(
+    tuple (
+      "productId" -> number,
       "itemCode" -> nonEmptyText,
       "values" -> list(
         tuple (
-          "featureCode" -> nonEmptyText,
-          "valueCode" -> nonEmptyText,
+          "featureId" -> number,
+          "valueId" -> number,
           "value" -> nonEmptyText
         )
       )
-    ) {
-      (productCode, code, values) => {
-        var valuesSet = Set[Value]()
-        values.foreach(v => {
-          val feature = Db.query[Feature].whereEqual("code", v._1).fetchOne().get
-          val valueCode = v._2
-          val value = v._3
-          valuesSet += Db.query[Value].whereEqual("code", valueCode).fetchOne() getOrElse {
-            Db.save(FeatureValue(feature.code, valueCode))
-            Db.save(Value("", value, value))
-          }
-        })
-        Logger.debug("Product: "+productCode+", Code: "+code)
-        val product: models.Product = Db.query[models.Product].whereEqual("productCode", productCode).fetchOne().get
-        models.Item(product, code, valuesSet)
-      }
-    }
-    {
-      (item: Item) => {
-        var valuesList = List[(String, String, String)]()
-        item.product.features foreach(feature => {
-          valuesList :::= List((feature.code, "", ""))
-        })
-
-        Some(item.product.productCode, item.code, valuesList)
-      }
-    }
+    )
   )
 
   def add(productCode: String) = Action {
       val product = Db.query[models.Product].whereEqual("productCode", productCode).fetchOne().get
 
-      val randomCode = product.productCode +"-I"+(Db.query[Item].count()+1)
-
-      val item = models.Item(product, randomCode, Set())
-
-      Ok(views.html.product.item.add.index(product, AddItemForm.fill(item)))
+      Ok(views.html.product.item.add.index(product, AddItemForm))
   }
 
   def addItem(productCode: String) = Action { implicit request =>
@@ -69,11 +39,23 @@ object Item extends Controller{
       val product = Db.query[models.Product].whereEqual("productCode", productCode).fetchOne().get
       BadRequest(views.html.product.item.add.index(product, itemForm))
     } else {
-      val item = itemForm.get
+      val itemF = itemForm.get
 
-      val itemP = item.copy(values = item.values.map(v => Db.save(v)))
+      val item = Db.save(models.Item(itemF._2, "", ""))
 
-      Db.save(itemP)
+      Db.save(ItemProduct(item.id, itemF._1))
+
+      itemF._3 foreach (value => {
+        val feature = Db.fetchById[Feature](value._1)
+        if (feature.valueType equalsIgnoreCase  "list") {
+          val storedValue = Db.fetchById[Value](value._2)
+          Db.save(ItemValue(item.id, storedValue.id, feature.id))
+          Logger.debug(feature.id+" "+storedValue.id+" "+storedValue)
+        } else {
+          val storedValue = Db.save(Value("", value._3, value._3))
+          Db.save(ItemValue(item.id, storedValue.id, feature.id))
+        }
+      })
 
       Redirect(controllers.product.routes.Index.detail(Db.query[models.Product].whereEqual("productCode", productCode).fetchOne().get.id))
     }
