@@ -1,0 +1,180 @@
+@(product: models.Product with sorm.Persisted, formT: play.api.data.Form[scala.List[models.Transaction]], formO: play.api.data.Form[(Int, String, scala.collection.immutable.List[(Int, Int, String)])])
+
+@import helper._
+@implicitFieldConstructor = @{
+    FieldConstructor(twitterBootstrapInput.render)
+}
+
+@scripts = {
+    <script src="@routes.Assets.at("javascripts/transaction.js")"></script>
+    <script src="@routes.Assets.at("javascripts/typeahead.bundle.js")"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
+    <script src="@routes.Assets.at("javascripts/handlebars-v2.0.0.js")"></script>
+
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery.dataTables.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.tableTools.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.colVis.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.colReorder.min.css")"/>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/dataTables.responsive.css")"/>
+    <script src="@routes.Assets.at("javascripts/jquery.dataTables.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.tableTools.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.colVis.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.colReorder.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/dataTables.responsive.min.js")"></script>
+
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/transaction.css")"/>
+}
+@main(null, scripts) {
+    <div class="span12">
+        <h3>Transact: @product.name</h3>
+        @if(Product.featureCount(product.id) > 0) {
+                <script>
+                var list = [];
+                @for(item <- Product.items(product.id)) {
+                    list.push ( {
+                        code : '@item.code',
+                        values: '@for(value <- Item.valuesFor(item.id)){ @value._2.name | }'
+                    } );
+                }
+                </script>
+                <div class="well">
+                    <fieldset>
+                        @inputText(
+                            formO("productId").copy(value = Option[String](product.id.toString)),
+                            args = '_label -> null,
+                            'class -> "hidden",
+                            '_help -> ""
+                        )
+                        <div class="col-lg-3">
+                            <label for="item-code">Item Code</label>
+                            <br/>
+                            <div class="input-group">
+                                <input id="item-code" name="@formO("itemCode").name" placeholder="Item code" class="form-control typeahead" required/>
+                                <span class="input-group-btn">
+                                    <a class="btn btn-info btn-sm" type="button" id="list-btn" data-toggle="modal" href="#item-list"><i class="fa fa-list"></i></a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <label for="amount">Qty</label>
+                            <br/>
+                            <input id="amount" class="form-control" type="number" step="any" min="1" required/>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                            <label for="rate">Rate</label>
+                            <br/>
+                            <input id="rate" class="form-control" type="number" step="any" min="1" required/>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="date">Date</label>
+                            <br/>
+                            <input id="date" class="form-control" placeholder="Date" required/>
+                            <script>
+                            $("#date" ).datepicker({
+                            todayBtn: "linked",
+                            todayHighlight: true
+                            } ).datepicker("setDate", new Date())
+                            </script>
+                        </div>
+                        <div class="col-lg-2">
+                            <label for="person">From/To</label>
+                            <br/>
+                            <input id="person" type="text" class="form-control" placeholder="From/To"/>
+                        </div>
+
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                            <input type="button" class="btn btn-success" value='Purchase' id="add-button"/>
+                            <input type="button" class="btn btn-primary" value='Sell' id="sell-button"/>
+                        </div>
+                    </fieldset>
+
+                    @helper.form(controllers.product.routes.Transaction.doSave(product.id)) {
+                        <div class="modal-footer">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"></i>Save</button>
+                                    <button id="clear-button" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i>Clear</button>
+                                </div>
+                                <!-- Default panel contents -->
+                                <table class="table" id="transaction-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Quantity</th>
+                                            <th>Rate</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    @helper.repeat(formT("transaction-list"), min = formT("transaction-list").indexes.length + 1) { map =>
+                                    <script>
+                                    var sampleCode = '@map("item-code").name'
+                                    var sampleAmount = '@map("amount").name'
+                                    var sampleRate = '@map("rate").name'
+                                    var sampleDate = '@map("date").name'
+                                    </script>
+                                    }
+                                    <tbody id="table-body">
+                                    </tbody>
+                                    <tfoot>
+                                        <tr id="footer-row">
+                                            <td>Total:</td>
+                                            <td id="total-amount"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <!-- Table -->
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="modal fade" id="item-list" style="width:100%">
+                    <div class="modal-dialog" style="width:100%">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">List of items</h4>
+                            </div>
+                            <div class="modal-body">
+                            @defining(Product.items(product.id)) { items =>
+
+                                @if(items.size !=0) {
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                            @for(feature <- Product.features(product.id)) {
+                                                <th>@feature.name</th>
+                                            }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @for(item <- items) {
+                                            <tr>
+                                            @for(feature <- Product.features(product.id)) {
+                                                <td>@Item.valuesFor(item.id).map(v => v._2.value)</td>
+                                            }
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                } else {
+                                    No items seem to have been added
+                                }
+                            }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+        } else {
+            No features have been defined for this product
+        }
+    </div>
+}
+
